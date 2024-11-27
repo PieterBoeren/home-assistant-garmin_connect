@@ -168,6 +168,9 @@ class GarminConnectSensor(CoordinatorEntity, SensorEntity):
 
         if self._type == "lastActivities":
             return len(self.coordinator.data[self._type])
+        
+        if self._type == "dailySteps":
+            return sum(day["totalSteps"] for day in self.coordinator.data[self._type])
 
         if self._type == "badges":
             return len(self.coordinator.data[self._type])
@@ -214,6 +217,9 @@ class GarminConnectSensor(CoordinatorEntity, SensorEntity):
 
         if self._type == "lastActivities":
             attributes["last_Activities"] = self.coordinator.data[self._type]
+
+        if self._type == "dailySteps":
+            attributes["daily_Steps"] = self.coordinator.data[self._type]
 
         if self._type == "badges":
             attributes["badges"] = self.coordinator.data[self._type]

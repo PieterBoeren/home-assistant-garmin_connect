@@ -105,6 +105,7 @@ class GarminConnectDataUpdateCoordinator(DataUpdateCoordinator):
         summary = {}
         body = {}
         activites = {}
+        daily_steps = {}
         alarms = {}
         gear = {}
         gear_stats = {}
@@ -129,6 +130,12 @@ class GarminConnectDataUpdateCoordinator(DataUpdateCoordinator):
             )
             _LOGGER.debug(f"Activities data: {activities}")
             summary['lastActivities'] = activities
+
+            daily_steps = await self.hass.async_add_executor_job(
+                self._api.get_daily_steps, (date.today()-timedelta(days=7)).isoformat(), (date.today()+timedelta(days=1)).isoformat()
+            )
+            _LOGGER.debug(f"Daily steps: {daily_steps}")
+            summary['dailySteps'] = daily_steps
 
             badges = await self.hass.async_add_executor_job(
                 self._api.get_earned_badges
